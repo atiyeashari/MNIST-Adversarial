@@ -1,3 +1,4 @@
 MNIST_data/
+model/
 *.idea*
 *__ pycache __*
