@@ -3,7 +3,7 @@ import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 import utils
 from computational_graph import * # dump the computational graph into the global namespace to avoid boilerplate code for loading the model here. Mnist digits are also loaded.
-
+import matplotlib.pyplot as plt
 ###############################################################################
 # This code is taken from
 # https://github.com/andrwc/Adversarial-MNIST
