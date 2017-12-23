@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
 import base64
 
 ###############################################################################
@@ -38,7 +37,6 @@ if __name__ == '__main__':
     sixes_idx = predclasses[predclasses[0] == 6].index
 
     predscore = pd.Series(np.max(adtwos_pred[sixes_idx], axis=1))
-    # predscore.sort(ascending=False)  # inplace
 
     orig, adv = get_adversarial_sixes(origtwos, adtwos, sixes_idx)
 
@@ -46,19 +44,20 @@ if __name__ == '__main__':
     # This part is added by myself
     #######################################
 
+    # Showing the images of ten original, delta and adversarial twos which are misclassified as six
     fig = plt.figure()
     for i in predscore.index[:10]:
-        a = fig.add_subplot(10, 3, i*3+1)
+        a = fig.add_subplot(10, 3, i * 3 + 1)
         # imgplot = plt.imshow(orig[i].reshape(28,28))
-        a.matshow(orig[i].reshape(28,28), cmap=plt.cm.binary)
+        a.matshow(orig[i].reshape(28, 28), cmap=plt.cm.binary)
         plt.xticks(())
         plt.yticks(())
-        a = fig.add_subplot(10, 3, i*3+2)
+        a = fig.add_subplot(10, 3, i * 3 + 2)
         # imgplot = plt.imshow((adv[i] - orig[i]).reshape(28, 28))
         a.matshow((adv[i] - orig[i]).reshape(28, 28), cmap=plt.cm.binary)
         plt.xticks(())
         plt.yticks(())
-        a = fig.add_subplot(10, 3, i*3+3)
+        a = fig.add_subplot(10, 3, i * 3 + 3)
         # imgplot = plt.imshow(adv[i].reshape(28, 28))
         a.matshow(adv[i].reshape(28, 28), cmap=plt.cm.binary)
         plt.xticks(())

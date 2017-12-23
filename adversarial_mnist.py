@@ -2,14 +2,16 @@ import numpy as np
 import tensorflow as tf
 from tensorflow.examples.tutorials.mnist import input_data
 import utils
-from computational_graph import * # dump the computational graph into the global namespace to avoid boilerplate code for loading the model here. Mnist digits are also loaded.
+from computational_graph import *  # dump the computational graph into the global namespace to avoid boilerplate code for loading the model here. Mnist digits are also loaded.
 import matplotlib.pyplot as plt
+
 ###############################################################################
 # This code is taken from
 # https://github.com/andrwc/Adversarial-MNIST
 ###############################################################################
 
 """The primary file used for generating adversarial images"""
+
 
 def filter_mnist_by_digit(labels, filterdigit):
     """(np.array, int) -> [int]
@@ -21,9 +23,10 @@ def filter_mnist_by_digit(labels, filterdigit):
     mnist image. Assumes the encoding is zero-indexed.
     :param filterdigit: int corresponding to the digit to be filtered.
     """
-    return [idx for idx,row in enumerate(labels) if row[filterdigit]==1]
+    return [idx for idx, row in enumerate(labels) if row[filterdigit] == 1]
 
-def generate_labels(numrows, digit): 
+
+def generate_labels(numrows, digit):
     """(int, int) -> np.array
     Return a numpy array of shape (numrows, 10), each row containing a
     one-hot-encoded vector for the value specified by digit.
@@ -37,6 +40,7 @@ def generate_labels(numrows, digit):
     arr = np.zeros((numrows, 10))
     arr[:, digit] = 1
     return arr
+
 
 def get_mnist_images_digit(tf_mnist, digit):
     """(tensorflow.contrib.learn.python.learn.datasets.base.Datasets, int) -> np.array
@@ -54,15 +58,17 @@ def get_mnist_images_digit(tf_mnist, digit):
     val = mnist.validation.images[idx_val]
     return np.vstack([train, test, val])
 
+
 def gen_whitenoise_samps(shp):
-    return tf.select(tf.random_uniform([shp,784], 
-                     dtype=tf.float32) > 0.5, 
-                     tf.ones([shp,784]), 
-                     tf.zeros([shp,784]))
+    return tf.select(tf.random_uniform([shp, 784],
+                                       dtype=tf.float32) > 0.5,
+                     tf.ones([shp, 784]),
+                     tf.zeros([shp, 784]))
 
-if __name__=='__main__':
 
-    print("test accuracy %g"%accuracy.eval(feed_dict={
+if __name__ == '__main__':
+
+    print("test accuracy %g" % accuracy.eval(feed_dict={
         x: mnist.test.images, y_: mnist.test.labels, keep_prob: 1.0}))
 
     six_label = generate_labels(1, 6)
@@ -74,9 +80,9 @@ if __name__=='__main__':
     adversarial_twos = np.zeros((len(imgs), 784))
     niter = 0
     for img in imgs:
-        feed_dict = {x: img.reshape(1,784), y_: six_label, keep_prob: 1.0}
+        feed_dict = {x: img.reshape(1, 784), y_: six_label, keep_prob: 1.0}
         adv_ex = sess.run(adx, feed_dict=feed_dict)
-        adversarial_twos[niter,:] += adv_ex[0]
+        adversarial_twos[niter, :] += adv_ex[0]
         niter += 1
 
     adversarial_twos_pred = y_conv.eval({x: adversarial_twos, keep_prob: 1.0})
